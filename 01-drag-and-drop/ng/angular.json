@@ -34,7 +34,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "ng",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
