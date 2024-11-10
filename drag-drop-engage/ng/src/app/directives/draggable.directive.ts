@@ -13,6 +13,12 @@ export class DraggableDirective implements AfterViewInit {
   /** Height in number of cells */
   @Input('height') height: number = 3;
 
+  /** Left offset in number of cells */
+  @Input('left') left: number = 0;
+
+  /** Top offset in number of cells */
+  @Input('top') top: number = 0;
+
   private _offset: { x: number, y: number } = { x: 0, y: 0 };
   private _lastPosition: { x: number, y: number } = { x: 0, y: 0 };
   private _cellSize: number = 50;
@@ -37,6 +43,8 @@ export class DraggableDirective implements AfterViewInit {
 
     this._element.nativeElement.style.width = `${this.width * this._cellSize}px`;
     this._element.nativeElement.style.height = `${this.height * this._cellSize}px`;
+    this._element.nativeElement.style.left = `${this.left * this._cellSize}px`;
+    this._element.nativeElement.style.top = `${this.top * this._cellSize}px`;
   }
 
   /**

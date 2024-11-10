@@ -8,8 +8,8 @@
     </div>
   </nav>
 
-  <main ngGrid>
-    <div class="card position-absolute" ngDraggable [width]="4" [height]="4">
+  <main ngGrid [cellSize]="25">
+    <div class="card position-absolute" ngDraggable [width]="6" [height]="6" [left]="1" [top]="1">
       <div class="card-header">
         Drag and Drop
       </div>
