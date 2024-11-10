@@ -8,8 +8,16 @@
     </div>
   </nav>
 
-  <main ngGrid>
-    <div class="card position-absolute" style="height: 150px; width: 150px;" ngDraggable>
+  <main ngGrid [cellSize]="25">
+    <div class="card position-absolute" style="height: 150px; width: 150px;" ngDraggable [leftOffset]="1" [topOffset]="1">
+      <div class="card-header">
+        Drag and Drop
+      </div>
+      <div class="card-body">
+      </div>
+    </div>
+
+    <div class="card position-absolute" style="height: 150px; width: 150px;" ngDraggable [leftOffset]="8" [topOffset]="1">
       <div class="card-header">
         Drag and Drop
       </div>

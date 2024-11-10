@@ -6,22 +6,34 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 })
 export class GridDirective implements AfterViewInit {
 
-  @Input('cellSize') cellSize: number = 50; // Size of the grid cells in pixels
+  /** Size of the grid cells in pixels */
+  @Input('cellSize') cellSize: number = 0; // Size of the grid cells in pixels
+
+  /** CSS color of the grid border */
   @Input('borderColor') borderColor: string = '#c2c2c2'; // CSS color of the grid border
+
+  /** Width of the grid border in pixels */
   @Input('borderWidth') borderWidth: number = 1; // Width of the grid border in
+
+  /** Reference to the element this directive is attached to */
+  get nativeElement(): HTMLElement { return this._container.nativeElement; }
 
   /**
    * Constructor
    * @param _container Injected reference to the element this directive is attached to
    */
-  constructor(private _container: ElementRef) { }
+  constructor(private _container: ElementRef) {
+  }
 
 
   /**
    * AfterViewInit lifecycle hook
    * Creates a grid with the specified cell size and appends it to the container
-   */
+  */
   public ngAfterViewInit(): void {
+    if (this.cellSize <= 0) throw new Error('Cell size must be greater than 0'); // Throw an error if the cell size is less than or equal to 0
+
+    this._container.nativeElement.style.position = 'relative'; // Set the position of the container to relative
     let grid = this.createGrid(this.cellSize, this.borderColor, this.borderWidth); // Create a grid with
     this._container.nativeElement.appendChild(grid); // Append the grid to the container
   }
