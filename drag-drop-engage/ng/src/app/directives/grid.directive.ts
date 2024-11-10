@@ -10,6 +10,9 @@ export class GridDirective implements AfterViewInit {
   @Input('borderColor') borderColor: string = '#c2c2c2'; // CSS color of the grid border
   @Input('borderWidth') borderWidth: number = 1; // Width of the grid border in
 
+  /** Reference to the element this directive is attached to */
+  get nativeElement(): HTMLElement { return this._container.nativeElement; }
+
   /**
    * Constructor
    * @param _container Injected reference to the element this directive is attached to
@@ -17,9 +20,15 @@ export class GridDirective implements AfterViewInit {
   constructor(private _container: ElementRef) { }
 
 
-  ngAfterViewInit(): void {
-    this.createGrid(this.cellSize, this.borderColor, this.borderWidth); // Create a grid with a cell size of 50
-    this._container.nativeElement.appendChild(this.createGrid(50)); // Append the grid to the container
+  /**
+   * AfterViewInit lifecycle hook
+   * Creates a grid with the specified cell size and appends it to the container
+   */
+  public ngAfterViewInit(): void {
+    this._container.nativeElement.style.position = 'relative'; // Set the container's position to relative
+
+    let grid = this.createGrid(this.cellSize, this.borderColor, this.borderWidth); // Create a grid with
+    this._container.nativeElement.appendChild(grid); // Append the grid to the container
   }
 
   /**
