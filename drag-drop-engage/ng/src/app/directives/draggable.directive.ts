@@ -5,12 +5,17 @@ import { GridDirective } from './grid.directive';
   selector: '[ngDraggable]',
   standalone: true
 })
-export class DraggableDirective {
+export class DraggableDirective implements AfterViewInit {
 
-  @Input('cellSize') cellSize: number = 50;
+  /** Width in number of cells */
+  @Input('width') width: number = 3;
+
+  /** Height in number of cells */
+  @Input('height') height: number = 3;
 
   private _offset: { x: number, y: number } = { x: 0, y: 0 };
   private _lastPosition: { x: number, y: number } = { x: 0, y: 0 };
+  private _cellSize: number = 50;
 
   /**
    * Constructor
@@ -22,11 +27,18 @@ export class DraggableDirective {
     this._element.nativeElement.setAttribute('draggable', 'true'); // Make the element draggable
     this._element.nativeElement.style.position = 'absolute'; // Set the position to absolute
     this._element.nativeElement.addEventListener('drag', this.drag.bind(this)); // Add event listener for drag
-  
+
     document.addEventListener('dragover', this.dragOver.bind(this)); // Add event listener for dragover
     document.addEventListener('drop', this.drop.bind(this)); // Add event listener for drop
   }
-  
+
+  public ngAfterViewInit(): void {
+    this._cellSize = this._gridParent.cellSize;
+
+    this._element.nativeElement.style.width = `${this.width * this._cellSize}px`;
+    this._element.nativeElement.style.height = `${this.height * this._cellSize}px`;
+  }
+
   /**
    * DragStart event handler
    * Calculates the offset of the mouse pointer from the top-left corner of the element for correct dropping
@@ -116,18 +128,18 @@ export class DraggableDirective {
     let y = event.clientY + this._offset.y; // Prepare y by adding the mouse
 
 
-    x = Math.round(x / this.cellSize) * this.cellSize; // Calculate the new x position
-    y = Math.round(y / this.cellSize) * this.cellSize; // Calculate the new y position
+    x = Math.round(x / this._cellSize) * this._cellSize; // Calculate the new x position
+    y = Math.round(y / this._cellSize) * this._cellSize; // Calculate the new y position
 
     if (x < 0) x = 0; // if element is too far left, set it to the left edge
     if (y < 0) y = 0; // if element is too far up, set it to the top edge
     if (x + element.width > dropZone.width) { // if element is too far right, set it to the right edge
       let delta = x + element.width - dropZone.width; // Calculate how far the element is past the right edge
-      x = Math.floor((x - delta) / this.cellSize) * this.cellSize; // recalulate the x position
+      x = Math.floor((x - delta) / this._cellSize) * this._cellSize; // recalulate the x position
     }
     if (y + element.height > dropZone.height) { // if element is too far down, set it to the bottom edge
       let delta = y + element.height - dropZone.height; // Calculate how far the element is past the bottom edge
-      y = Math.floor((y - delta) / this.cellSize) * this.cellSize; // recalulate the y position
+      y = Math.floor((y - delta) / this._cellSize) * this._cellSize; // recalulate the y position
     }
 
     return { x, y }; // Return the new
