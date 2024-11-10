@@ -111,10 +111,10 @@ export class DraggableDirective {
 
     let dropZone = this.getDropZone(event)?.getBoundingClientRect(); // Get the rect of the drop zone
     if (!dropZone) return { x: 0, y: 0 }; // Return 0, 0 if the drop zone is not found
-    console.log(this._offset);
+
     let x = event.clientX + this._offset.x; // Prepare x by adding the mouse
     let y = event.clientY + this._offset.y; // Prepare y by adding the mouse
-    console.log(x, y);
+
 
     x = Math.round(x / this.cellSize) * this.cellSize; // Calculate the new x position
     y = Math.round(y / this.cellSize) * this.cellSize; // Calculate the new y position
@@ -127,8 +127,9 @@ export class DraggableDirective {
     }
     if (y + element.height > dropZone.height) { // if element is too far down, set it to the bottom edge
       let delta = y + element.height - dropZone.height; // Calculate how far the element is past the bottom edge
-      y = Math.ceil((y - delta) / this.cellSize) * this.cellSize; // recalulate the y position
+      y = Math.floor((y - delta) / this.cellSize) * this.cellSize; // recalulate the y position
     }
+
     return { x, y }; // Return the new
   }
 }
